@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Tensor Lens</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='site.css') }}">
+</head>
+<body>
+    <main class="app-shell">
+        <header>
+            <p class="eyebrow">Tensor workspace</p>
+            <h1>Tensor Editor</h1>
+            <p class="muted">Upload audio, image, and audio of the waveform, preview a selection, and export the edited tensor.</p>
+            <br />
+            <nav class="navbar">
+                <ul class="nav-menu">
+                    <li><a href="{{ url_for('edit_audio') }}" class="nav-item">Audio</a></li>
+                    <li><a href="{{ url_for('edit_image') }}" class="nav-item">Image</a></li>
+                    <li><a href="{{ url_for('box_rotate') }}" class="nav-item">Box 3D</a></li>
+                    <li><a href="{{ url_for('face_rotate') }}" class="nav-item">Face 3D</a></li>
+                    <li><a href="{{ url_for('vector') }}" class="nav-item">Height Map 3D</a></li>
+
+                </ul>
+            </nav>
+        </header>
+
+
+    </main>
+   
+
+</body>
+</html>

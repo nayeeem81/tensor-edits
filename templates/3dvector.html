@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3D Volumetric Image Heightmap Tensor Viewer</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            background: #0f172a;
+            padding: 20px;
+            color: #f8fafc;
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 25px;
+            color: #38bdf8;
+        }
+
+        /* --- Flexbox Master Grid Architecture --- */
+        .flex-dashboard {
+            display: flex;
+            flex-direction: row;
+            gap: 25px;
+            max-width: 1200px;
+            margin: 0 auto;
+            background: #1e293b;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+        }
+
+        .controls-panel {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            min-width: 300px;
+        }
+
+        .canvas-panel {
+            flex: 1.3;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #020617;
+            border: 1px solid #334155;
+            border-radius: 8px;
+            padding: 10px;
+        }
+
+        .history-panel {
+            flex: 0.7;
+            display: flex;
+            flex-direction: column;
+            border-left: 1px solid #334155;
+            padding-left: 25px;
+            max-height: 560px;
+        }
+
+        canvas {
+            background: #020617;
+            border-radius: 4px;
+        }
+
+        .control-section {
+            background: #334155;
+            padding: 15px;
+            border-radius: 6px;
+        }
+
+        .slider-group {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            margin-bottom: 12px;
+        }
+
+        .btn-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 10px;
+        }
+
+        label {
+            font-size: 13px;
+            color: #cbd5e1;
+        }
+
+        span {
+            float: right;
+            color: #38bdf8;
+            font-weight: bold;
+        }
+
+        button {
+            padding: 9px 14px;
+            border: none;
+            border-radius: 5px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-start {
+            background-color: #10b981;
+            color: white;
+        }
+
+        .btn-stop {
+            background-color: #ef4444;
+            color: white;
+        }
+
+        .btn-action {
+            background-color: #3b82f6;
+            color: white;
+        }
+
+        button:hover {
+            opacity: 0.9;
+        }
+
+        button:disabled {
+            background-color: #64748b;
+            cursor: not-allowed;
+        }
+
+        .history-list {
+            flex: 1;
+            overflow-y: auto;
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            border: 1px solid #334155;
+            background: #0f172a;
+            border-radius: 4px;
+        }
+
+            .history-list li {
+                padding: 8px 12px;
+                border-bottom: 1px solid #334155;
+                font-size: 12px;
+                font-family: monospace;
+                cursor: pointer;
+            }
+
+                .history-list li:hover {
+                    background: #1e293b;
+                    color: #38bdf8;
+                }
+
+        .upload-input {
+            background: #1e293b;
+            padding: 8px;
+            border-radius: 4px;
+            border: 1px dashed #38bdf8;
+            color: #cbd5e1;
+            width: 90%;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+    <h2>3D Volumetric Image Heightmap Tensor Viewer</h2>
+
+    <div class="flex-dashboard">
+
+        <!-- Controls Stack Left -->
+        <div class="controls-panel">
+
+            <!-- NEW SECTION: LOCAL IMAGE SOURCE UPLOADER -->
+            <div class="control-section" style="border: 1px solid #38bdf8;">
+                <h3>0. Load Local Image File</h3>
+                <input type="file" id="imageSourceInput" class="upload-input" accept="image/jpeg, image/png">
+                <div style="font-size: 11px; margin-top: 5px; color: #94a3b8;">Select a JPEG/PNG to see it transform instantly into 3D geometry!</div>
+            </div>
+
+            <div class="control-section">
+                <h3>1. Spatial Rotations</h3>
+                <div class="slider-group">
+                    <label>Mesh Tilt (X): <span id="valX">30</span>°</label>
+                    <input type="range" id="rotateX" min="0" max="360" value="30">
+                </div>
+                <div class="slider-group">
+                    <label>Mesh Spin (Y): <span id="valY">45</span>°</label>
+                    <input type="range" id="rotateY" min="0" max="360" value="45">
+                </div>
+            </div>
+
+            <div class="control-section">
+                <h3>2. Dynamic Lighting Vector</h3>
+                <div class="slider-group">
+                    <label>Light Source X: <span id="valLX">1.0</span></label>
+                    <input type="range" id="lightX" min="-20" max="20" step="1" value="10">
+                </div>
+                <div class="slider-group">
+                    <label>Light Source Y: <span id="valLY">1.0</span></label>
+                    <input type="range" id="lightY" min="-20" max="20" step="1" value="10">
+                </div>
+                <div class="slider-group">
+                    <label>Light Source Z: <span id="valLZ">1.0</span></label>
+                    <input type="range" id="lightZ" min="1" max="30" step="1" value="10">
+                </div>
+            </div>
+
+            <div class="control-section">
+                <h3>3. Operations Pipeline</h3>
+                <div>Status: <span id="animStatus" style="color: #f59e0b; font-weight:bold;">Idle</span></div>
+                <div class="btn-group">
+                    <button id="startBtn" class="btn-start">Start Auto-Rotate</button>
+                    <button id="stopBtn" class="btn-stop" disabled>Stop</button>
+                </div>
+                <div class="btn-group">
+                    <button id="saveBtn" class="btn-action">Log Matrix Frame</button>
+                    <button id="downloadBtn" class="btn-action" style="background:#8b5cf6;">Export JSON</button>
+                    <button id="uploadTriggerBtn" class="btn-action" style="background:#8b5cf6;">Import JSON</button>
+                    <button id="playFileBtn" class="btn-start" style="background:#d97706;" disabled>Play History File</button>
+                    <input type="file" id="jsonFileInput" accept=".json" style="display: none;">
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Canvas Viewport Center -->
+        <div class="canvas-panel">
+            <canvas id="displayCanvas" width="400" height="400"></canvas>
+        </div>
+
+        <!-- Automation Frame Memory Log Right -->
+        <div class="history-panel">
+            <h3>Tensor Sequence Array Stack (<span id="savedCount">0</span>)</h3>
+            <ul id="historyList" class="history-list"></ul>
+        </div>
+
+    </div>
+
+    <script>
+        const canvas = document.getElementById('displayCanvas');
+        const ctx = canvas.getContext('2d');
+
+        let savedTensorsCollection = [];
+        let animationIntervalId = null;
+        let playbackIntervalId = null;
+        let currentTensorPayload = null;
+
+        async function fetchAndRenderPipelineFrame() {
+            const dx = document.getElementById('rotateX').value;
+            const dy = document.getElementById('rotateY').value;
+            const lx = (parseFloat(document.getElementById('lightX').value) / 10).toFixed(1);
+            const ly = (parseFloat(document.getElementById('lightY').value) / 10).toFixed(1);
+            const lz = (parseFloat(document.getElementById('lightZ').value) / 10).toFixed(1);
+
+            document.getElementById('valX').innerText = dx;
+            document.getElementById('valY').innerText = dy;
+            document.getElementById('valLX').innerText = lx;
+            document.getElementById('valLY').innerText = ly;
+            document.getElementById('valLZ').innerText = lz;
+
+    const requestUrl = '/api/rendervector?x=' + dx + '&y=' + dy + '&lx=' + lx + '&ly=' + ly + '&lz=' + lz;
+
+            try {
+                const response = await fetch(requestUrl);
+                const data = await response.json();
+                currentTensorPayload = data.raw_tensor_state;
+                drawMeshVectors(data.faces);
+            } catch (err) {
+                console.error("Vector rendering data exchange pipeline structural breakdown:", err);
+            }
+        }
+
+        // POST Image Upload pipeline implementation
+        async function handleLocalImageUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const formData = new FormData();
+            formData.append('image', file);
+
+            try {
+                document.getElementById('animStatus').innerText = "Uploading Tensor File...";
+                const response = await fetch('/api/upload_image', {
+                    method: 'POST',
+                    body: formData
+                });
+                const result = await response.json();
+
+                if (result.success) {
+                    document.getElementById('animStatus').innerText = "Mesh Loaded!";
+                    fetchAndRenderPipelineFrame(); // Instantly update view
+                } else {
+                    alert("Upload error: " + result.error);
+                }
+            } catch (err) {
+                console.error("Error piping local file to Python endpoint engine:", err);
+            } finally {
+                setTimeout(() => {
+                    if (!animationIntervalId && !playbackIntervalId) {
+                        document.getElementById('animStatus').innerText = "Idle";
+                    }
+                }, 1500);
+            }
+        }
+
+        function drawMeshVectors(faces) {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            faces.forEach(face => {
+                ctx.beginPath();
+                face.points.forEach((point, idx) => {
+                    if (idx === 0) ctx.moveTo(point.x, point.y);
+                    else ctx.lineTo(point.x, point.y);
+                });
+                ctx.closePath();
+                ctx.fillStyle = face.color;
+                ctx.fill();
+                ctx.strokeStyle = 'rgba(15, 23, 42, 0.08)';
+                ctx.lineWidth = 0.4;
+                ctx.stroke();
+            });
+        }
+
+        function stopAllIntervals() {
+            if (animationIntervalId) { clearInterval(animationIntervalId); animationIntervalId = null; }
+            if (playbackIntervalId) { clearInterval(playbackIntervalId); playbackIntervalId = null; }
+
+            document.getElementById('animStatus').innerText = "Idle";
+
+            document.getElementById('animStatus').style.color = "#f59e0b"; document.getElementById('startBtn').disabled = false; document.getElementById('stopBtn').disabled = true;
+        }
+
+        function startAutoRotationLoop() {
+            stopAllIntervals();
+
+            let currentX = parseInt(document.getElementById('rotateX').value);
+
+            let currentY = parseInt(document.getElementById('rotateY').value);
+
+            document.getElementById('animStatus').innerText = "Processing Sequence Loop";
+
+            document.getElementById('animStatus').style.color = "#10b981";
+
+            document.getElementById('startBtn').disabled = true;
+
+            document.getElementById('stopBtn').disabled = false;
+
+            animationIntervalId = setInterval(async () => {
+                currentX = (currentX + 10) % 360; currentY = (currentY + 6) % 360; document.getElementById('rotateX').value = currentX;
+
+                document.getElementById('rotateY').value = currentY;
+
+                await fetchAndRenderPipelineFrame();
+
+                captureCurrentTensorState();
+            }, 300);
+        }
+
+        function playUploadedSequence() {
+
+            stopAllIntervals();
+
+            if (savedTensorsCollection.length === 0) return;
+
+            let currentIndex = 0;
+            document.getElementById('animStatus').innerText = "Playing JSON Trail";
+
+            document.getElementById('animStatus').style.color = "#8b5cf6";
+
+            document.getElementById('stopBtn').disabled = false; playbackIntervalId = setInterval(async () => {
+
+                if (currentIndex >= savedTensorsCollection.length) currentIndex = 0;
+
+                const frame = savedTensorsCollection[currentIndex]; document.getElementById('rotateX').value = frame.angles.x;
+
+                document.getElementById('rotateY').value = frame.angles.y;
+
+                document.getElementById('lightX').value = frame.light.x * 10;
+
+                document.getElementById('lightY').value = frame.light.y * 10; document.getElementById('lightZ').value = frame.light.z * 10;
+
+                await fetchAndRenderPipelineFrame();
+                currentIndex++;
+            }, 250);
+        }
+
+        function captureCurrentTensorState() { if (!currentTensorPayload) return; const structuralSnapshot = JSON.parse(JSON.stringify(currentTensorPayload)); structuralSnapshot.timestamp = new Date().toLocaleTimeString(); savedTensorsCollection.push(structuralSnapshot); updateHistoryLayoutView(); } function updateHistoryLayoutView() {
+            document.getElementById('savedCount').innerText = savedTensorsCollection.length; const container = document.getElementById('historyList'); container.innerHTML = ""; savedTensorsCollection.forEach((item, index) => {
+                const li = document.createElement('li'); li.innerText = `Frame ${index}: Mesh (X: ${item.angles.x}, Y: ${item.angles.y})`;
+
+                li.addEventListener('click', () => {
+
+                    stopAllIntervals();
+                    document.getElementById('rotateX').value = item.angles.x;
+
+                    document.getElementById('rotateY').value = item.angles.y; document.getElementById('lightX').value = item.light.x * 10;
+
+                    document.getElementById('lightY').value = item.light.y * 10; document.getElementById('lightZ').value = item.light.z * 10;
+
+                    fetchAndRenderPipelineFrame();
+                }); container.appendChild(li);
+            });
+
+            if (savedTensorsCollection.length > 0) {
+                document.getElementById('playFileBtn').disabled = false;
+            }
+        } function exportCollectionToJSONFile() { if (savedTensorsCollection.length === 0) return; const dataString = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(savedTensorsCollection, null, 2)); const dlAnchor = document.createElement('a'); dlAnchor.setAttribute("href", dataString); dlAnchor.setAttribute("download", "volumetric_image_history.json"); document.body.appendChild(dlAnchor); dlAnchor.click(); dlAnchor.remove(); } function importCollectionFromJSONFile(event) { const reader = new FileReader(); reader.onload = function (e) { try { const parsedData = JSON.parse(e.target.result); if (Array.isArray(parsedData)) { savedTensorsCollection = parsedData; updateHistoryLayoutView(); } } catch (err) { alert("Failure parsing target sequence log JSON arrays."); } }; reader.readAsText(event.target.files); }
+
+        // Attach layout hooks to
+
+        const inputs = ['rotateX', 'rotateY', 'lightX', 'lightY', 'lightZ'];
+        inputs.forEach(id => {
+            document.getElementById(id).addEventListener('input', () => {
+                if (id.startsWith('rotate')) stopAllIntervals();
+                fetchAndRenderPipelineFrame();
+            });
+        });
+        document.getElementById('imageSourceInput').addEventListener('change', handleLocalImageUpload);
+        document.getElementById('startBtn').addEventListener('click', startAutoRotationLoop);
+        document.getElementById('stopBtn').addEventListener('click', stopAllIntervals);
+        document.getElementById('saveBtn').addEventListener('click', captureCurrentTensorState);
+        document.getElementById('downloadBtn').addEventListener('click', exportCollectionToJSONFile);
+        document.getElementById('playFileBtn').addEventListener('click', playUploadedSequence);
+        document.getElementById('uploadTriggerBtn').addEventListener('click', () => document.getElementById('jsonFileInput').click());
+        document.getElementById('jsonFileInput').addEventListener('change', importCollectionFromJSONFile);
+
+        // Run default baseline bootstrap initialization
+        fetchAndRenderPipelineFrame();
+    </script>
+</body>
+</html>
