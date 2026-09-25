@@ -1,62 +1,4 @@
-/* Basic Navigation Styling */
-nav {
-    background-color: #333;
-    display: flex;
-    padding: 0 20px;
-}
 
-.nav-item {
-    position: relative;
-    list-style: none;
-}
-
-.nav-link {
-    display: inline-block;
-    color: white;
-    padding: 14px 20px;
-    text-decoration: none;
-    cursor: pointer;
-}
-
-    .nav-link:hover, .dropdown-toggle:focus {
-        background-color: #111;
-    }
-/* Hidden Child Menu */
-.dropdown-menu {
-    display: none;
-    position: absolute;
-    background-color: #f9f9f9;
-    min-width: 160px;
-    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-    z-index: 1;
-    padding: 0;
-    margin: 0;
-    list-style: none;
-}
-
-    .dropdown-menu a {
-        color: black;
-        padding: 12px 16px;
-        text-decoration: none;
-        display: block;
-    }
-
-        .dropdown-menu a:hover {
-            background-color: #f1f1f1;
-        }
-/* Class added by JavaScript to show menu */
-.show {
-    display: block;
-}
-
-
-
-:root {
-    color-scheme: light;
-    font-family: Inter, ui-sans-serif, system-ui, sans-serif;
-    color: #17212b;
-    background: #eef3f7;
-}
 
 * {
     box-sizing: border-box;
@@ -98,6 +40,27 @@ h2 {
     text-transform: uppercase;
     font-size: 1.25rem;
 }
+
+.flex-dashboard {
+    display: flex;
+    flex-direction: row;
+    gap: 30px;
+    max-width: 1100px;
+    margin: 0 auto;
+    background: white;
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+}
+
+.controls-panel {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    min-width: 320px;
+}
+
 
 .panel {
     background: white;
@@ -322,49 +285,5 @@ input[type=range] {
 
     button {
         width: 100%;
-    }
-}
-/* Base Reset */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
-/* Navbar Container */
-.navbar {
-    background-color: #1a1a1a;
-    padding: 0 20px;
-}
-
-/* Horizontal Menu Layout */
-.nav-menu {
-    display: flex; /* Aligns items side-by-side */
-    list-style-type: none; /* Removes default bullet points */
-    justify-content: center; /* Centers the menu items horizontally */
-}
-
-/* Navigation Links */
-.nav-item {
-    display: block;
-    color: #ffffff;
-    text-decoration: none; /* Removes text underline */
-    padding: 15px 20px;
-    font-family: sans-serif;
-    font-size: 16px;
-    transition: background-color 0.3s ease, color 0.3s ease;
-}
-
-    /* Hover State Effect */
-    .nav-item:hover {
-        background-color: #333333;
-        color: #00bcd4;
-    }
-
-/* Mobile Responsiveness */
-@media (max-width: 600px) {
-    .nav-menu {
-        flex-direction: column; /* Stack items vertically on small screens */
-        text-align: center;
     }
 }
