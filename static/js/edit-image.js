@@ -8,12 +8,10 @@ const pixelValues = document.querySelector('#pixel-values');
 const downloadButton = document.querySelector('#download-button');
 const imageUpload = document.querySelector('#image-upload');
 const imageName = document.querySelector('#image-name');
-const rotateRL = document.querySelector('#rotaterl');
 const controls = [
   document.querySelector('#red-control'),
   document.querySelector('#green-control'),
   document.querySelector('#blue-control'),
-
 ];
 const numberControls = [
   document.querySelector('#red-number'),
@@ -326,40 +324,6 @@ document.querySelector('#undo-button').addEventListener('click', () => {
   updateTensorReadout();
   render();
 });
-
-function renderrotate(value) {
-  const { width, height, pixels } = tensor;
-  const image = context.createImageData(width, height);
-  const offsets = controls.map((control) => Number(control.value));
-  outputs.forEach((output, index) => { output.value = offsets[index] > 0 ? `+${offsets[index]}` : offsets[index]; });
-
-  for (let y = 0; y < height; y += 1) {
-    for (let x = 0; x < width; x += 1) {
-      const source = displayPixel(x, y);
-      const index = (y * width + x) * 4;
-      image[index+value].data[index] = clamp(source[0] + offsets[0]);
-      image[index+value].data[index + 1] = clamp(source[1] + offsets[1]);
-      image[index+value].data[index + 2] = clamp(source[2] + offsets[2]);
-      image[index+value].data[index + 3] = 255;
-    }
-
-  }
-  context.putImageData(image, 0, 0);
-  drawSelection();
-}
-
-document.querySelector('#rotaterl').addEventListener('click', () => {
-  let val =  rotateRL.value;
-  if (tensorStack.length <= 1) return;
-  tensorStack.pop();
-  tensor = tensorStack[tensorStack.length - 1];
-  
-  dots = [];
-  selectedPolygon = null;
-  selectionSource = 'latest';
-  renderrotate(val);
-});
-
 document.querySelector('#reset-button').addEventListener('click', () => {
   controls.forEach((control) => { control.value = 0; });
   syncNumberControls();

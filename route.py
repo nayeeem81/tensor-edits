@@ -1,5 +1,5 @@
 from __future__ import annotations
-
+from pathlib import Path
 import io
 import wave
 import uuid
@@ -44,6 +44,7 @@ class AudioState:
     backup_waveform: Optional[torch.Tensor] = None
     undo_history: list[torch.Tensor] = field(default_factory=list)
 
+IMAGE_PATH = Path(__file__).with_name("sample.png")
 
 
 
@@ -654,6 +655,10 @@ def api_edit_image():
         )
     except Exception as exc:
         return jsonify({"error": str(exc)}), 400
+
+@app.get("/api/tensor")
+def tensor():
+        return jsonify(image_processing.tensor_payload(image_processing.load_rgb_tensor(IMAGE_PATH)))
 
 
 # ==========================================
