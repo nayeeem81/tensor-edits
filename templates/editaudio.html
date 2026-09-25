@@ -1,69 +1,82 @@
 {% extends "layout.html" %}
 <title>{% block title %}Tensor Lens{% endblock %}</title>
 {% block content %}
-<h1 class="eyebrow">Tensor Workspace</h1>
+    <h1 class="eyebrow">Tensor Workspace</h1>
+            
+    <p>Audio waveform, Image, 3D Vector Editor</p>
 
-            <p>Audio waveform, Image, 3D Vector Editor</p>
+    <div class="panel-container">
+    
+         <!-- Panel Heading -->
+         <h2 class="panel-heading">Audio Editor: Spectrogram (Visual representation of audio)</h2>
 
-                    <section class="flex-dashboard">
-            <label class="file-picker">
-                <span>Audio file</span>
-                <input id="audio-file" type="file" accept=".wav,.mp3,.webm,.weba,.ogg,audio/wav,audio/mpeg,audio/webm,audio/ogg">
+         <div class="button-container" aria-label="Tensor editing controls">
+
+            <button class="custom-btn" id="play-latest-tensor-button" disabled>Play (latest)</button>
+            <button class="custom-btn" id="load-original-button" disabled>Play Original</button>
+            <button class="custom-btn" id="play-selected-tensor-button" disabled>Play (Selected)</button> &nbsp; 
+            <button class="custom-btn" id="undo-tensor-button" disabled>Undo</button> &nbsp; 
+            <button class="custom-btn" id="select-tensor-button" disabled>Select</button>
+            <button class="custom-btn" id="clear-selection-button" disabled>Clear (Selection)</button> &nbsp;  &nbsp;
+            <button class="custom-btn" id="copy-tensor-button" disabled>Copy</button>
+            <button class="custom-btn" id="cut-tensor-button" disabled>Cut</button>
+            <button class="custom-btn" id="paste-tensor-button" disabled>Paste</button>
+            <button class="custom-btn" id="delete-tensor-button" disabled>Delete</button>
+            <button class="custom-btn" id="backup-tensor-button" disabled>Backup</button>
+            <button class="custom-btn" id="download-tensor-button" disabled>Download</button>
+            
+
+        </div>
+
+        <div class="waveform-chart">
+            <div id="waveform-scroll" class="waveform-scroll">
+                <canvas id="waveform" aria-label="Audio spectrogram"></canvas>
+            </div>
+        </div>
+
+  </div>
+
+  <div class="panel-container">
+    
+         <!-- Panel Heading -->
+         <h2 class="panel-heading">Random Split (secs): Break, create random slices, play and download clips aszip file.</h2>
+
+         <div class="button-container" aria-label="Tensor slice making controls">
+
+            <button class="custom-btn" id="break-tensor-button" disabled>Break Audior</button>
+
+            <label id="break-duration-control" class="custom-btn">
+                <span>Slice Length (seconds)</span>
+                <input class="custom-btn" id="break-duration" type="number" min="0.1" max="3600" step="0.1" value="7" disabled>
             </label>
-            <button id="upload-button" class="primary">Upload audio</button>
-            <span id="file-name" class="muted">No file selected</span>
-            <div class="image-upload-controls">
-                <label class="file-picker">
-                    <span>Image file</span>
-                    <input id="image-file" type="file" accept="image/png,image/jpeg,image/webp">
-                </label>
-                <button id="image-upload-button" class="primary" disabled>Load image</button>
-            </div>
-        </section>
 
-        <section class="flex-dashboard">
-            <button id="break-tensor-button" disabled>Break the tensor</button>
-            <label id="break-duration-control" class="break-duration">
-                <span>Break time (seconds)</span>
-                <input id="break-duration" type="number" min="0.1" max="3600" step="0.1" value="7" disabled>
-            </label>
-            <button id="random-tensor-button" disabled>Random</button>
-            <button id="play-button" disabled>Play original tensor</button>
-            <button id="play-random-button" disabled>Play Random Tensor</button>
-            <button id="stop-button" disabled>Stop</button>
-            <button id="download-selection" disabled>Download stacks</button>
-        </section>
+            <button class="custom-btn" id="random-tensor-button" disabled>Random Slices</button>
 
-        <section class="flex-dashboard">
-            <div class="panel-heading">
-                <div>
-                    <h2>Pitch visualizer image</h2>
-                    <div class="tensor-edit-toolbar" aria-label="Tensor editing controls">
-                        <button id="play-latest-tensor-button" disabled>Play Latest Tensor</button>
-                        <button id="load-original-button" disabled>Load Original Tensor</button>
-                        <button id="play-selected-tensor-button" disabled>Play Selected</button>
-                        <button id="select-tensor-button" disabled>Select</button>
-                        <button id="clear-selection-button" disabled>Clear Selection</button>
-                        <button id="copy-tensor-button" disabled>Copy</button>
-                        <button id="cut-tensor-button" disabled>Cut</button>
-                        <button id="paste-tensor-button" disabled>Paste</button>
-                        <button id="delete-tensor-button" disabled>Delete</button>
-                        <button id="backup-tensor-button" disabled>Backup</button>
-                        <button id="download-tensor-button" disabled>Download</button>
-                        <button id="undo-tensor-button" disabled>Undo</button>
-                    </div>
-                    <p id="image-name" class="muted">Upload an image to transform with pitch and time.</p>
-                </div>
-            </div>
-            <div class="waveform-chart">
-                <div id="waveform-scroll" class="waveform-scroll">
-                    <canvas id="waveform" aria-label="Audio spectrogram"></canvas>
-                </div>
-            </div>
-            <canvas id="image-canvas" aria-label="Image transformed by the audio pitch path"></canvas>
-        </section>
+            <button class="custom-btn" id="play-button" disabled>Play Original</button>
 
-        <section class="flex-dashboard">
+            <button class="custom-btn" id="play-random-button" disabled>Play Random</button>
+
+            <button class="custom-btn" id="stop-button" disabled>Stop</button>
+
+            <button class="custom-btn" id="download-selection" disabled>Download Clips</button>
+            
+        </div>
+
+  </div>
+
+
+  <div class="panel-container">
+    
+    <!-- Panel Heading -->
+    <h2 class="panel-heading"> Magnitude of current Time Path</h2>
+
+    <p id="image-name" class="muted">Upload an image to transform with pitch and time toview the magnitude</p>
+
+    <canvas id="image-canvas" aria-label="Image transformed by the audio pitch path"></canvas>
+
+ </div>
+
+  <section class="flex-dashboard">
             <div class="panel control">
                 <label for="pitch-brightness-slider">Pitch brightness <output id="pitch-brightness-value">100%</output></label>
                 <input id="pitch-brightness-slider" type="range" min="0" max="100" step="1" value="100">
@@ -83,6 +96,26 @@
                 <button id="save-button" class="primary" disabled>Keep changes</button>
             </div>
         </section>
+   
+  
+  <div class="panel-container">
+            <label class="file-picker">
+                <span>Audio file</span>
+                <input id="audio-file" type="file" accept=".wav,.mp3,.webm,.weba,.ogg,audio/wav,audio/mpeg,audio/webm,audio/ogg">
+            </label>
+            <button id="upload-button" class="primary">Upload audio</button>
+            <span id="file-name" class="muted">No file selected</span>
+            <div class="image-upload-controls">
+                <label class="file-picker">
+                    <span>Image file</span>
+                    <input id="image-file" type="file" accept="image/png,image/jpeg,image/webp">
+                </label>
+                <button id="image-upload-button" class="primary" disabled>Load image</button>
+            </div>
+       </div>
+
+
+       
 
         <section class="flex-dashboard">
             <div class="waveform-chart">
