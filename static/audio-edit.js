@@ -5,6 +5,7 @@ const imageUploadButton = document.querySelector("#image-upload-button");
 const imageCanvas = document.querySelector("#image-canvas");
 const imageNameEl = document.querySelector("#image-name");
 const canvas = document.querySelector("#waveform");
+const waveformCanvas = document.querySelector("#waveformCanvas");
 const waveformScroll = document.querySelector("#waveform-scroll");
 const gainSlider = document.querySelector("#gain-slider");
 const pitchSlider = document.querySelector("#pitch-slider");
@@ -42,6 +43,7 @@ const playSelectedTensorButton = document.querySelector("#play-selected-tensor-b
 let sessionId = null;
 let metadata = null;
 let spectrogram = [];
+let waveformArray = [];
 let pitches = [];
 let pitchMagnitudes = [];
 let randomSegments = [];
@@ -323,6 +325,57 @@ function renderSpectrogram() {
   }
 }
 
+/**
+ * Draws an audio waveform array onto a canvas.
+ * @param {Float32Array|Array} waveform - Array of audio samples between -1.0 and 1.0
+ * @param {HTMLCanvasElement} canvas - The canvas element to draw on
+ */
+function drawWaveform(waveform) {
+    const ctx = waveformCanvas.getContext('2d');
+    const width = waveformCanvas.width;
+    const height = waveformCanvas.height;
+    const centerY = height / 2;
+
+    // 1. Clear the canvas for a fresh draw
+    ctx.clearRect(0, 0, width, height);
+
+    // 2. Set style properties (Warm Analog Amber Glow)
+    ctx.strokeStyle = '#ff9f43';
+    ctx.lineWidth = 2;
+    ctx.lineCap = 'round';
+    ctx.beginPath();
+
+    // 3. Determine how many audio samples correspond to one horizontal pixel
+    const step = Math.ceil(waveform.length / width);
+
+    // 4. Loop across the width of the canvas pixel by pixel
+    for (let x = 0; x < width; x++) {
+        // Find the index in the audio array for this specific pixel columns
+        const audioIndex = x * step;
+
+        if (audioIndex >= waveform.length) break;
+
+        // Grab the audio value (clamped between -1.0 and 1.0 just in case)
+        const sample = Math.max(-1.0, Math.min(1.0, waveform[audioIndex]));
+
+        // Map the audio float value to Y coordinates
+        // A sample of 1.0 goes to the top, -1.0 goes to the bottom
+        const yValue = sample * centerY;
+
+        const topY = centerY - yValue;
+        const bottomY = centerY + yValue;
+
+        // Draw a vertical line from the top peak to the bottom peak
+        ctx.moveTo(x, topY);
+        ctx.lineTo(x, bottomY);
+    }
+
+    // 5. Render the paths to the screen
+    ctx.stroke();
+}
+
+
+
 // 3. The Animation Loop (Breaks the image vertically)
 function animate() {
     if (!imageLoaded) return;
@@ -404,8 +457,11 @@ async function refreshSpectrogram() {
     metadataEl.textContent = `${body.filename} · ${body.channels} channel(s) · ${body.sample_rate} Hz · ${body.duration.toFixed(2)} seconds`;
   }
   updateLabels();
-  renderSpectrogram();
+    renderSpectrogram();
+    drawWaveform(body.waveform);
 }
+
+
 
 async function uploadImage() {
   if (!sessionId) return setError("Upload audio before loading an image.");
@@ -449,7 +505,8 @@ async function upload() {
       .filter(Boolean)
       .forEach((button) => { button.disabled = false; });
     tensorEditButtons.filter(Boolean).forEach((button) => { button.disabled = false; });
-    updateTensorEditButtons();
+      updateTensorEditButtons();
+      
     setStatus("Loaded");
   } catch (error) {
     setError(error.message);

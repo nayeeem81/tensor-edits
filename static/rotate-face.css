@@ -1,13 +1,49 @@
-﻿body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: #f0f2f5;
-    padding: 20px;
-    color: #333;
+﻿:root {
+    color-scheme: light;
+    font-family: Inter, ui-sans-serif, system-ui, sans-serif;
+    color: #17212b;
+    background: #eef3f7;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    background-color: black;
+    opacity: 0.9;
+}
+
+.app-shell {
+    width: min(1100px, calc(100% - 32px));
+    margin: 40px auto;
+}
+
+header {
+    margin-bottom: 24px;
+}
+
+h1, h2, p {
+    margin-top: 0;
+}
+
+h1 {
+    margin-bottom: 8px;
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    letter-spacing: -0.05em;
 }
 
 h2 {
-    text-align: center;
-    margin-bottom: 25px;
+    margin-bottom: 6px;
+}
+
+.eyebrow {
+    color: #168785;
+    font-weight: 700;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    font-size: 1.25rem;
 }
 
 .flex-dashboard {
@@ -21,7 +57,6 @@ h2 {
     border-radius: 12px;
     box-shadow: 0 4px 15px rgba(0,0,0,0.08);
 }
-
 .controls-panel {
     flex: 1;
     display: flex;
@@ -136,4 +171,49 @@ button:disabled {
 .status-badge {
     font-weight: bold;
     color: #e67e22;
+}
+
+/* Base Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Navbar Container */
+.navbar {
+    background-color: #1a1a1a;
+    padding: 0 20px;
+}
+
+/* Horizontal Menu Layout */
+.nav-menu {
+    display: flex; /* Aligns items side-by-side */
+    list-style-type: none; /* Removes default bullet points */
+    justify-content: center; /* Centers the menu items horizontally */
+}
+
+/* Navigation Links */
+.nav-item {
+    display: block;
+    color: #ffffff;
+    text-decoration: none; /* Removes text underline */
+    padding: 15px 20px;
+    font-family: sans-serif;
+    font-size: 16px;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+    /* Hover State Effect */
+    .nav-item:hover {
+        background-color: #333333;
+        color: #00bcd4;
+    }
+
+/* Mobile Responsiveness */
+@media (max-width: 600px) {
+    .nav-menu {
+        flex-direction: column; /* Stack items vertically on small screens */
+        text-align: center;
+    }
 }

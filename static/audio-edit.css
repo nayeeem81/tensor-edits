@@ -11,6 +11,8 @@
 
 body {
     margin: 0;
+    background-color: black;
+    opacity: 0.9;
 }
 
 .app-shell {
@@ -41,7 +43,19 @@ h2 {
     font-weight: 700;
     letter-spacing: .12em;
     text-transform: uppercase;
-    font-size: .75rem;
+    font-size: 1.25rem;
+}
+
+.flex-dashboard {
+    display: flex;
+    flex-direction: row;
+    gap: 30px;
+    max-width: 1100px;
+    margin: 0 auto;
+    background: white;
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.08);
 }
 
 .panel {
@@ -50,6 +64,7 @@ h2 {
     border-radius: 16px;
     padding: 20px;
     box-shadow: 0 8px 30px #1830440d;
+    gap: 14px;
 }
 
 .upload-panel, .actions, .panel-heading, .selection-labels {
@@ -269,6 +284,51 @@ input[type=range] {
         width: 100%;
     }
 }
+/* Base Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Navbar Container */
+.navbar {
+    background-color: #1a1a1a;
+    padding: 0 20px;
+}
+
+/* Horizontal Menu Layout */
+.nav-menu {
+    display: flex; /* Aligns items side-by-side */
+    list-style-type: none; /* Removes default bullet points */
+    justify-content: center; /* Centers the menu items horizontally */
+}
+
+/* Navigation Links */
+.nav-item {
+    display: block;
+    color: #ffffff;
+    text-decoration: none; /* Removes text underline */
+    padding: 15px 20px;
+    font-family: sans-serif;
+    font-size: 16px;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+    /* Hover State Effect */
+    .nav-item:hover {
+        background-color: #333333;
+        color: #00bcd4;
+    }
+
+/* Mobile Responsiveness */
+@media (max-width: 600px) {
+    .nav-menu {
+        flex-direction: column; /* Stack items vertically on small screens */
+        text-align: center;
+    }
+}
+
 /* Base Reset */
 * {
     margin: 0;

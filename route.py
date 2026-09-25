@@ -22,6 +22,7 @@ import image_processing
 import face_tensor_processing
 import box_tensor_processing
 import vector_processing
+import torch.nn.functional as F
 
 app = Flask(__name__)
 
@@ -42,6 +43,8 @@ class AudioState:
     clipboard: Optional[torch.Tensor] = None
     backup_waveform: Optional[torch.Tensor] = None
     undo_history: list[torch.Tensor] = field(default_factory=list)
+
+
 
 
 def _session_id() -> str:
@@ -69,7 +72,17 @@ def _spectrogram(state: AudioState) -> tuple[torch.Tensor, torch.Tensor]:
     )
     magnitude = transformed.abs().mean(dim=0)
     frequencies = torch.fft.rfftfreq(window_length, d=1 / (state.sample_rate * 2))
-    return magnitude, frequencies
+    # 1. Take the absolute value or just downsample the raw sequence
+    # Let's say your canvas is 800 pixels wide; 1000 to 2000 points is plenty.
+    target_length = 2000
+    raw_wave = state.waveform.squeeze()  # Ensure it's a 1D array
+
+    # Downsample using linear interpolation
+    downsampled_wave = F.interpolate(
+        raw_wave.view(1, 1, -1), size=target_length, mode="linear", align_corners=False
+    ).squeeze()
+
+    return magnitude, frequencies, downsampled_wave
 
 
 def _stack_spectrograms(state: AudioState) -> list[dict]:
@@ -81,7 +94,7 @@ def _stack_spectrograms(state: AudioState) -> list[dict]:
             sample_rate=state.sample_rate,
             filename=state.filename,
         )
-        magnitude, frequencies = _spectrogram(segment_state)
+        magnitude, frequencies, downsampled_wave = _spectrogram(segment_state)
         magnitude = torch.log1p(magnitude)
         magnitude = magnitude / magnitude.amax().clamp_min(1e-8)
         max_frames = 300
@@ -97,6 +110,7 @@ def _stack_spectrograms(state: AudioState) -> list[dict]:
                 "pitches": frequencies[magnitude.argmax(dim=0)].tolist(),
                 "pitch_magnitudes": magnitude.amax(dim=0).tolist(),
                 "duration": tensor.shape[1] / state.sample_rate,
+                "waveform": downsampled_wave.tolist(),
             }
         )
     return result
@@ -109,7 +123,7 @@ def _spectrogram_payload(waveform: torch.Tensor, sample_rate: int) -> dict:
         sample_rate=sample_rate,
         filename="stack",
     )
-    magnitude, frequencies = _spectrogram(segment_state)
+    magnitude, frequencies, downsampled_wave = _spectrogram(segment_state)
     magnitude = torch.log1p(magnitude)
     magnitude = magnitude / magnitude.amax().clamp_min(1e-8)
     max_frames = 900
@@ -123,6 +137,7 @@ def _spectrogram_payload(waveform: torch.Tensor, sample_rate: int) -> dict:
         "values": magnitude.transpose(0, 1).tolist(),
         "pitches": frequencies[magnitude.argmax(dim=0)].tolist(),
         "pitch_magnitudes": magnitude.amax(dim=0).tolist(),
+        "waveform": downsampled_wave.tolist(),
     }
 
 
@@ -267,7 +282,7 @@ def spectrogram():
     except ValueError as exc:
         return jsonify({"error": str(exc)}), 400
 
-    magnitude, frequencies = _spectrogram(state)
+    magnitude, frequencies, downsampled_wave = _spectrogram(state)
     max_frames = 4000
     if magnitude.shape[1] > max_frames:
         step = (magnitude.shape[1] + max_frames - 1) // max_frames
@@ -278,6 +293,7 @@ def spectrogram():
     pitches = frequencies[pitch_bins]
     return jsonify(
         {
+            "waveform": downsampled_wave.tolist(),
             "values": magnitude.transpose(0, 1).tolist(),
             "pitches": pitches.tolist(),
             "pitch_magnitudes": magnitude.amax(dim=0).tolist(),
@@ -504,14 +520,14 @@ def random_tensor():
 @app.get("/api/random-spectrogram")
 def random_spectrogram():
     try:
-        state = SESSIONS[audio_processing._session_id()]
+        state = SESSIONS[_session_id()]
     except ValueError as exc:
         return jsonify({"error": str(exc)}), 400
     if not state.random_stack:
         return jsonify({"error": "Create a random tensor stack first."}), 400
     return jsonify(
         {
-            "segments": audio_processing._stack_spectrograms(state),
+            "segments": _stack_spectrograms(state),
             "sample_rate": state.sample_rate,
             "duration": state.random_tensor.shape[1] / state.sample_rate,
         }
@@ -521,7 +537,7 @@ def random_spectrogram():
 @app.post("/api/resample")
 def resample():
     try:
-        state = SESSIONS[audio_processing._session_id()]
+        state = SESSIONS[_session_id()]
     except ValueError as exc:
         return jsonify({"error": str(exc)}), 400
 

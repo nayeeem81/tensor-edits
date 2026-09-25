@@ -8,13 +8,13 @@
 </head>
 <body>
     <main class="app-shell">
+
         <header>
-            <p class="eyebrow">Tensor workspace</p>
-            <h1>Tensor Editor</h1>
-            <p class="muted">Upload audio, image, and audio of the waveform, preview a selection, and export the edited tensor.</p>
-            <br />
+
             <nav class="navbar">
+
                 <ul class="nav-menu">
+
                     <li><a href="{{ url_for('edit_audio') }}" class="nav-item">Audio</a></li>
                     <li><a href="{{ url_for('edit_image') }}" class="nav-item">Image</a></li>
                     <li><a href="{{ url_for('box_rotate') }}" class="nav-item">Box 3D</a></li>
@@ -23,11 +23,15 @@
 
                 </ul>
             </nav>
+
+            <h1 class="eyebrow">Tensor Workspace</h1>
+
+            <p>Audio waveform, Image, 3D Vector Editor</p>
+
         </header>
 
-
     </main>
-   
+
 
 </body>
 </html>

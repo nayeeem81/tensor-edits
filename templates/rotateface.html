@@ -7,52 +7,71 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='rotate-face.css') }}">
 </head>
 <body>
+    <main class="app-shell">
+        <header>
 
-    <h2>3D Woman Face Tensor Rotator</h2>
+            <nav class="navbar">
 
-    <div class="flex-dashboard">
+                <ul class="nav-menu">
 
-        <!-- Controls Panel Side -->
-        <div class="controls-panel">
-            <h3>Manual Rotation Axes</h3>
-            <div class="slider-group">
-                <label>X-Axis Angle: <span id="valX">0</span>°</label>
-                <input type="range" id="rotateX" min="0" max="360" value="0">
+                    <li><a href="{{ url_for('edit_audio') }}" class="nav-item">Audio</a></li>
+                    <li><a href="{{ url_for('edit_image') }}" class="nav-item">Image</a></li>
+                    <li><a href="{{ url_for('box_rotate') }}" class="nav-item">Box 3D</a></li>
+                    <li><a href="{{ url_for('face_rotate') }}" class="nav-item">Face 3D</a></li>
+                    <li><a href="{{ url_for('vector') }}" class="nav-item">Height Map 3D</a></li>
+
+                </ul>
+            </nav>
+
+            <h1 class="eyebrow">Tensor Workspace</h1>
+
+            <p>Audio waveform, Image, 3D Vector Editor</p>
+
+        </header>
+        <div class="flex-dashboard">
+
+            <!-- Controls Panel Side -->
+            <div class="controls-panel">
+                <h3>Manual Rotation Axes</h3>
+                <div class="slider-group">
+                    <label>X-Axis Angle: <span id="valX">0</span>°</label>
+                    <input type="range" id="rotateX" min="0" max="360" value="0">
+                </div>
+                <div class="slider-group">
+                    <label>Y-Axis Angle: <span id="valY">0</span>°</label>
+                    <input type="range" id="rotateY" min="0" max="360" value="0">
+                </div>
+
+                <h3>Automation Engine</h3>
+                <div>Status: <span id="animStatus" class="status-badge">Idle</span></div>
+                <div class="btn-group">
+                    <button id="startBtn" class="btn-start">Start Auto-Rotate</button>
+                    <button id="stopBtn" class="btn-stop" disabled>Stop</button>
+                </div>
+
+                <h3>Data Framework I/O</h3>
+                <div class="btn-group">
+                    <button id="saveBtn" class="btn-save">Capture Tensor State</button>
+                    <button id="downloadBtn" class="btn-io">Download JSON</button>
+                    <button id="uploadTriggerBtn" class="btn-io">Upload JSON</button>
+                    <button id="playFileBtn" class="btn-start" style="background-color: #e67e22;" disabled>Play Uploaded File</button>
+                    <input type="file" id="jsonFileInput" accept=".json" style="display: none;">
+                </div>
             </div>
-            <div class="slider-group">
-                <label>Y-Axis Angle: <span id="valY">0</span>°</label>
-                <input type="range" id="rotateY" min="0" max="360" value="0">
+
+            <!-- Viewport Render Target Screen -->
+            <div class="canvas-panel">
+                <canvas id="displayCanvas" width="400" height="400"></canvas>
             </div>
 
-            <h3>Automation Engine</h3>
-            <div>Status: <span id="animStatus" class="status-badge">Idle</span></div>
-            <div class="btn-group">
-                <button id="startBtn" class="btn-start">Start Auto-Rotate</button>
-                <button id="stopBtn" class="btn-stop" disabled>Stop</button>
+            <!-- Matrix Serialization Logs History View -->
+            <div class="history-panel">
+                <h3>Captured Face Tensors (<span id="savedCount">0</span>)</h3>
+                <ul id="historyList" class="history-list"></ul>
             </div>
 
-            <h3>Data Framework I/O</h3>
-            <div class="btn-group">
-                <button id="saveBtn" class="btn-save">Capture Tensor State</button>
-                <button id="downloadBtn" class="btn-io">Download JSON</button>
-                <button id="uploadTriggerBtn" class="btn-io">Upload JSON</button>
-                <button id="playFileBtn" class="btn-start" style="background-color: #e67e22;" disabled>Play Uploaded File</button>
-                <input type="file" id="jsonFileInput" accept=".json" style="display: none;">
-            </div>
         </div>
-
-        <!-- Viewport Render Target Screen -->
-        <div class="canvas-panel">
-            <canvas id="displayCanvas" width="400" height="400"></canvas>
-        </div>
-
-        <!-- Matrix Serialization Logs History View -->
-        <div class="history-panel">
-            <h3>Captured Face Tensors (<span id="savedCount">0</span>)</h3>
-            <ul id="historyList" class="history-list"></ul>
-        </div>
-
-    </div>
+    </main>
     <script src="{{ url_for('static', filename='rotate-face.js') }}"></script>
 </body>
 </html>
