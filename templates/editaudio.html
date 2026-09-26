@@ -1,9 +1,57 @@
 {% extends "layout.html" %}
 <title>{% block title %}Tensor Lens{% endblock %}</title>
 {% block content %}
+   
     <h1 class="eyebrow">Tensor Workspace</h1>
             
     <p>Audio waveform, Image, 3D Vector Editor</p>
+    
+    <p id="error" class="error" role="alert"></p>
+
+    
+       <div class="panel-container">
+
+            <div class="waveform-chart">
+
+                <div id="waveform-scroll" class="waveform-scroll">
+
+                    <canvas id="waveformCanvas" ></canvas>
+
+                </div>
+
+            </div>
+
+         </div>
+
+
+     <div class="panel-container control">
+
+            <div class="button-container controls-grid">
+                <label for="pitch-brightness-slider">Pitch brightness <output id="pitch-brightness-value">100%</output></label>
+                <input id="pitch-brightness-slider" type="range" min="0" max="100" step="1" value="100">
+                <small>Adjust the visible pitch trace without changing the audio.</small>
+            </div>
+
+            <div class="button-container controls-grid">
+                <label for="gain-slider">Gain <output id="gain-value">1.00x</output></label>
+                <input id="gain-slider" type="range" min="0" max="2" step="0.01" value="1">
+                <small>0 silences the audio; 1 keeps it unchanged; 2 doubles it.</small>
+            </div>
+
+            <div class="button-container controls-grid">
+                <label for="rate-slider">Sample rate <output id="rate-value">44100 Hz</output></label>
+                <input id="rate-slider" type="range" min="8000" max="192000" step="100" value="44100">
+                <small>Changing this resamples the tensor and updates its duration.</small>
+            </div>
+
+            <div class="button-container controls-grid">
+
+                <button id="save-button" class="custom-btn" disabled>Apply</button>
+
+            </div>
+
+    </div>
+   
 
     <div class="panel-container">
     
@@ -29,9 +77,13 @@
         </div>
 
         <div class="waveform-chart">
+
             <div id="waveform-scroll" class="waveform-scroll">
+
                 <canvas id="waveform" aria-label="Audio spectrogram"></canvas>
+
             </div>
+
         </div>
 
   </div>
@@ -70,62 +122,44 @@
     <!-- Panel Heading -->
     <h2 class="panel-heading"> Magnitude of current Time Path</h2>
 
-    <p id="image-name" class="muted">Upload an image to transform with pitch and time toview the magnitude</p>
+    <p id="image-name" class="muted">Upload an image to transform with pitch and time to view the magnitude</p>
 
     <canvas id="image-canvas" aria-label="Image transformed by the audio pitch path"></canvas>
 
  </div>
 
-  <section class="flex-dashboard">
-            <div class="panel control">
-                <label for="pitch-brightness-slider">Pitch brightness <output id="pitch-brightness-value">100%</output></label>
-                <input id="pitch-brightness-slider" type="range" min="0" max="100" step="1" value="100">
-                <small>Adjust the visible pitch trace without changing the audio.</small>
-            </div>
-            <div class="panel control">
-                <label for="gain-slider">Gain <output id="gain-value">1.00x</output></label>
-                <input id="gain-slider" type="range" min="0" max="2" step="0.01" value="1">
-                <small>0 silences the audio; 1 keeps it unchanged; 2 doubles it.</small>
-            </div>
-            <div class="panel control">
-                <label for="rate-slider">Sample rate <output id="rate-value">44100 Hz</output></label>
-                <input id="rate-slider" type="range" min="8000" max="192000" step="100" value="44100">
-                <small>Changing this resamples the tensor and updates its duration.</small>
-            </div>
-            <div>
-                <button id="save-button" class="primary" disabled>Keep changes</button>
-            </div>
-        </section>
-   
+ 
+
   
   <div class="panel-container">
-            <label class="file-picker">
-                <span>Audio file</span>
-                <input id="audio-file" type="file" accept=".wav,.mp3,.webm,.weba,.ogg,audio/wav,audio/mpeg,audio/webm,audio/ogg">
-            </label>
-            <button id="upload-button" class="primary">Upload audio</button>
-            <span id="file-name" class="muted">No file selected</span>
-            <div class="image-upload-controls">
-                <label class="file-picker">
-                    <span>Image file</span>
-                    <input id="image-file" type="file" accept="image/png,image/jpeg,image/webp">
-                </label>
-                <button id="image-upload-button" class="primary" disabled>Load image</button>
-            </div>
-       </div>
+           
+        <div class="button-container" aria-label="File upload controls">
 
+          
+             
+
+                <input  class="custom-btn" id="audio-file" type="file" accept=".wav,.mp3,.webm,.weba,.ogg,audio/wav,audio/mpeg,audio/webm,audio/ogg">
 
        
 
-        <section class="flex-dashboard">
-            <div class="waveform-chart">
-                <div id="waveform-scroll" class="waveform-scroll">
-                    <canvas id="waveformCanvas" width="800" height="200" style="background: #111; border-radius: 8px;"></canvas>
+            <button id="upload-button" class="custom-btn">Upload audio</button>
 
-                </div>
-            </div>
-        </section>
+            <span id="file-name" class="muted"></span>
 
-            <p id="error" class="error" role="alert"></p>
+
+          
+             
+                <input  class="custom-btn" id="image-file" type="file" accept="image/png,image/jpeg,image/webp">
+
+       
+
+            <button id="image-upload-button" class="custom-btn" disabled>Load image</button>
+
+        </div>
+
+    </div>
+
+
+       
             <script src="{{ url_for('static', filename='js/audio-edit.js') }}"></script>
 {% endblock %}
