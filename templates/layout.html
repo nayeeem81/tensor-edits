@@ -18,64 +18,49 @@
     --blue: #18148e;
 }
 
-/* Base Reset */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
 
-
-/* Basic Navigation Styling */
-nav {
-    background-color: #333;
-    display: flex;
+/* Navbar Base Container */
+.navbar {
+    background-color: #121212; /* Rich dark background */
+    border-bottom: 1px solid #292929; /* Subtle divider boundary */
     padding: 0 20px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
 }
 
-.nav-item {
-    position: relative;
+/* Flexbox Horizontal Menu Alignment */
+.nav-menu {
+    display: flex;
     list-style: none;
-}
-
-.nav-link {
-    display: inline-block;
-    color: white;
-    padding: 14px 20px;
-    text-decoration: none;
-    cursor: pointer;
-}
-
-    .nav-link:hover, .dropdown-toggle:focus {
-        background-color: #111;
-    }
-/* Hidden Child Menu */
-.dropdown-menu {
-    display: none;
-    position: absolute;
-    background-color: #f9f9f9;
-    min-width: 160px;
-    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-    z-index: 1;
-    padding: 0;
     margin: 0;
-    list-style: none;
+    padding: 0;
+    gap: 15px; /* Spacing between navigation items */
+    height: 60px; /* Standard navbar alignment line */
+    align-items: center;
 }
 
-    .dropdown-menu a {
-        color: black;
-        padding: 12px 16px;
-        text-decoration: none;
-        display: block;
+/* Individual Navigation Link Elements */
+.nav-item {
+    color: #e0e0e0; /* Off-white text for comfortable reading */
+    text-decoration: none;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 15px;
+    font-weight: 500;
+    padding: 8px 16px;
+    border-radius: 6px;
+    transition: all 0.2s ease-in-out;
+}
+
+    /* Hover State Interactions */
+    .nav-item:hover {
+        color: #00ffcc; /* Matches your neon cyan waveform visual theme */
+        background-color: #1e1e1e; /* Highlight plate surface background */
     }
 
-        .dropdown-menu a:hover {
-            background-color: #f1f1f1;
-        }
-/* Class added by JavaScript to show menu */
-.show {
-    display: block;
-}
+    /* Active Page Highlight Element */
+    .nav-item.active {
+        color: #ffffff;
+        background-color: #2a2a2a;
+    }
 
 
 
@@ -93,21 +78,26 @@ nav {
 
      <nav class="navbar">
 
-                <ul class="nav-menu">
+         <ul class="nav-menu">
 
-                    <li><a href="{{ url_for('edit_audio') }}" class="nav-item">Audio</a></li>
-                    <li><a href="{{ url_for('edit_image') }}" class="nav-item">Image</a></li>
-                    <li><a href="{{ url_for('box_rotate') }}" class="nav-item">Box 3D</a></li>
-                    <li><a href="{{ url_for('face_rotate') }}" class="nav-item">Face 3D</a></li>
-                    <li><a href="{{ url_for('vector') }}" class="nav-item">Height Map 3D</a></li>
+             <li><a href="{{ url_for('edit_audio') }}" class="nav-item">Audio</a></li>
+             <li><a href="{{ url_for('edit_image') }}" class="nav-item">Image</a></li>
+             <li><a href="{{ url_for('box_rotate') }}" class="nav-item">Box 3D</a></li>
+             <li><a href="{{ url_for('face_rotate') }}" class="nav-item">Face 3D</a></li>
+             <li><a href="{{ url_for('vector') }}" class="nav-item">Height Map 3D</a></li>
+             <li><a href="{{ url_for('audiowavformfrommic') }}" class="nav-item">Record from Mic</a></li>
 
-                </ul>
+         </ul>
     
     </nav>
 
-    <main style="padding: 20px;">
-        {% block content %}{% endblock %}
-    </main>
+     <main style="padding: 20px;">
+         <h1 class="eyebrow">Tensor Workspace</h1>
+
+         <p>Audio Spectogram, Mic Stream & Server Recorder, Image, 3D, Vector Viewer & Editor, </p>
+
+         {% block content %}{% endblock %}
+     </main>
 
     
      

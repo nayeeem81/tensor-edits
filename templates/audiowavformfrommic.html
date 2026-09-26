@@ -1,0 +1,29 @@
+{% extends "layout.html" %}
+<title>{% block title %}Tensor Edits{% endblock %}</title>
+{% block content %}
+
+<div class="panel-container">
+
+    <!-- Panel Heading -->
+    <h2 class="panel-heading">Audio Record from Browser Microphone</h2>
+
+    <div class="button-container" aria-label="Mic recording controls">
+
+        <button id="startBtn" class="custom-btn">Start Recording</button>
+
+        <button id="stopBtn" class="custom-btn" disabled>Stop & Save WAV</button>
+
+    </div>
+
+    <canvas id="waveformCanvas"></canvas>
+
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.8.4/socket.io.js"></script>
+<script src="{{ url_for('static', filename='js/audio-wavform-from-mic.js') }}"></script>
+{% endblock %}
+
+
+
+
+

@@ -1,19 +1,13 @@
 {% extends "layout.html" %}
-<title>{% block title %}Tensor Lens{% endblock %}</title>
+<title>{% block title %}Tensor Edits{% endblock %}</title>
 {% block content %}
-<h1 class="eyebrow">Tensor Workspace</h1>
 
-            <p>Audio waveform, Image, 3D Vector Editor</p>
-            
-        <header class="masthead">
-   
       <div class="shape-readout" aria-live="polite">
         <span id="shape">Loading tensor...</span>
         <span id="tensor-count">Stack 0</span>
         <span class="status-dot"></span>
       </div>
-    </header>
-
+   
     <section class="workspace" aria-label="Tensor image viewer">
       <aside class="controls-panel">
         <div class="upload-block">

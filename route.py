@@ -24,8 +24,16 @@ import box_tensor_processing
 import vector_processing
 import torch.nn.functional as F
 
+# Internal Microphone 
+import os
+import wave
+import struct
+
+from flask_socketio import SocketIO, emit
+
 app = Flask(__name__)
 
+socketio = SocketIO(app, cors_allowed_origins="*", logger=False, engineio_logger=False)
 
 @dataclass
 class AudioState:
@@ -712,3 +720,72 @@ def render_api():
     lz = float(request.args.get("lz", 1.0))
 
     return jsonify(vector_processing.get_lighted_3d_mesh(ax, ay, lx, ly, lz))
+
+
+# ==========================================
+# 7. BOUNDING MIC SOCKET IO AUDIO WAVFORM TENSOR MODULE
+# ==========================================
+
+# Global audio buffer to store chunks during an active recording session
+audio_buffer = []
+is_recording = False
+SAMPLE_RATE = 44100  # Default browser audio context sample rate
+
+@app.route("/audiowavformfrommic")
+def audiowavformfrommic():
+    return render_template("audiowavformfrommic.html")
+
+@socketio.on('start_recording')
+def handle_start():
+    global audio_buffer, is_recording
+    audio_buffer = []  # Clear any previous recordings
+    is_recording = True
+    print("Recording started...")
+
+@socketio.on('mic_data')
+def handle_mic_data(json_data):
+    global audio_buffer, is_recording
+    raw_audio_chunk = json_data.get('data', [])
+    
+    # If the user has toggled recording on, accumulate the samples
+    if is_recording:
+        audio_buffer.extend(raw_audio_chunk)
+        
+    # Echo back to the frontend immediately for continuous canvas visualization
+    emit('audio_waveform', {'data': raw_audio_chunk})
+
+@socketio.on('stop_recording')
+def handle_stop():
+    global audio_buffer, is_recording
+    if not is_recording:
+        return
+        
+    is_recording = False
+    print(f"Recording stopped. Processing {len(audio_buffer)} samples...")
+
+    if len(audio_buffer) == 0:
+        print("No audio data received.")
+        return
+
+    output_filename = "recorded_audio.wav"
+    
+    # Open a new wave file structure
+    # 1 channel (Mono), 2 bytes per sample (16-bit PCM), at standard Sample Rate
+    with wave.open(output_filename, 'wb') as wav_file:
+        wav_file.setnchannels(1)
+        wav_file.setsampwidth(2) 
+        wav_file.setframerate(SAMPLE_RATE)
+        
+        # Convert Float32 (-1.0 to 1.0) from browser into Int16 (-32768 to 32767) for standard WAV format
+        binary_data = bytearray()
+        for sample in audio_buffer:
+            # Clip the sample boundaries to prevent overflow distortion
+            sample = max(-1.0, min(1.0, sample))
+            int_sample = int(sample * 32767)
+
+            # Pack integer into 2-byte short little-endian configuration
+            binary_data.extend(struct.pack('<h', int_sample))
+            
+        wav_file.writeframes(binary_data)
+        
+        print(f"Successfully saved recording to: {os.path.abspath(output_filename)}")
