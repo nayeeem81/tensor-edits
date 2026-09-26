@@ -2,55 +2,49 @@
 <title>{% block title %}Tensor Edits{% endblock %}</title>
 {% block content %}
    
- 
+<div class="panel-container">
     <p id="error" class="error" role="alert"></p>
+    <div class="waveform-chart">
 
-    
-       <div class="panel-container">
+        <div id="waveform-scroll" class="waveform-scroll">
 
-            <div class="waveform-chart">
+            <canvas id="waveformCanvas"></canvas>
 
-                <div id="waveform-scroll" class="waveform-scroll">
-
-                    <canvas id="waveformCanvas" ></canvas>
-
-                </div>
-
-            </div>
-
-         </div>
-
-
-     <div class="panel-container control">
-
-            <div class="button-container controls-grid">
-                <label for="pitch-brightness-slider">Pitch brightness <output id="pitch-brightness-value">100%</output></label>
-                <input id="pitch-brightness-slider" type="range" min="0" max="100" step="1" value="100">
-                <small>Adjust the visible pitch trace without changing the audio.</small>
-            </div>
-
-            <div class="button-container controls-grid">
-                <label for="gain-slider">Gain <output id="gain-value">1.00x</output></label>
-                <input id="gain-slider" type="range" min="0" max="2" step="0.01" value="1">
-                <small>0 silences the audio; 1 keeps it unchanged; 2 doubles it.</small>
-            </div>
-
-            <div class="button-container controls-grid">
-                <label for="rate-slider">Sample rate <output id="rate-value">44100 Hz</output></label>
-                <input id="rate-slider" type="range" min="8000" max="192000" step="100" value="44100">
-                <small>Changing this resamples the tensor and updates its duration.</small>
-            </div>
-
-            <div class="button-container controls-grid">
-
-                <button id="save-button" class="custom-btn" disabled>Apply</button>
-
-            </div>
+        </div>
 
     </div>
-   
 
-    <div class="panel-container">
+</div>
+
+<div class="panel-container control">
+
+        <div class="button-container controls-grid">
+            <label for="pitch-brightness-slider">Pitch brightness <output id="pitch-brightness-value">100%</output></label>
+            <input id="pitch-brightness-slider" type="range" min="0" max="100" step="1" value="100">
+            <small>Adjust the visible pitch trace without changing the audio.</small>
+        </div>
+
+        <div class="button-container controls-grid">
+            <label for="gain-slider">Gain <output id="gain-value">1.00x</output></label>
+            <input id="gain-slider" type="range" min="0" max="2" step="0.01" value="1">
+            <small>0 silences the audio; 1 keeps it unchanged; 2 doubles it.</small>
+        </div>
+
+        <div class="button-container controls-grid">
+            <label for="rate-slider">Sample rate <output id="rate-value">44100 Hz</output></label>
+            <input id="rate-slider" type="range" min="8000" max="192000" step="100" value="44100">
+            <small>Changing this resamples the tensor and updates its duration.</small>
+        </div>
+
+        <div class="button-container controls-grid">
+
+            <button id="save-button" class="custom-btn" disabled>Apply</button>
+
+        </div>
+
+</div>
+   
+<div class="panel-container">
     
          <!-- Panel Heading -->
          <h2 class="panel-heading">Audio Editor: Spectrogram (Visual representation of audio)</h2>
@@ -85,7 +79,7 @@
 
   </div>
 
-  <div class="panel-container">
+<div class="panel-container">
     
          <!-- Panel Heading -->
          <h2 class="panel-heading">Random Split (secs): Break, create random slices, play and download clips aszip file.</h2>
@@ -113,8 +107,7 @@
 
   </div>
 
-
-  <div class="panel-container">
+<div class="panel-container">
     
     <!-- Panel Heading -->
     <h2 class="panel-heading"> Magnitude of current Time Path</h2>
@@ -125,10 +118,7 @@
 
  </div>
 
- 
-
-  
-  <div class="panel-container">
+<div class="panel-container">
            
         <div class="button-container" aria-label="File upload controls">
 
@@ -156,7 +146,6 @@
 
     </div>
 
+<script src="{{ url_for('static', filename='js/audio-edit.js') }}"></script>
 
-       
-            <script src="{{ url_for('static', filename='js/audio-edit.js') }}"></script>
 {% endblock %}

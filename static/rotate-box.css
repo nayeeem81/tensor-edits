@@ -1,34 +1,18 @@
 ﻿
-/* Flex Item: Dashboard Controls Side */
-.controls-panel {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-    min-width: 320px;
-}
-
 /* Flex Item: Visual 3D Space Viewport */
 .canvas-panel {
-    flex: 1.2;
     display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
     background: #fafafa;
     border: 1px solid #e0e0e0;
-    border-radius: 8px;
+    border-radius: 15px;
     padding: 15px;
 }
 
 /* Flex Item: Tensor History Log Panel */
 .history-panel {
-    flex: 0.8;
     display: flex;
-    flex-direction: column;
     border-left: 1px solid #eee;
-    padding-left: 20px;
-    max-height: 480px;
+    padding-left: 10px;
 }
 
 canvas {
@@ -38,7 +22,6 @@ canvas {
 
 .slider-group {
     display: flex;
-    flex-direction: column;
     gap: 5px;
 }
 
@@ -89,9 +72,8 @@ button:disabled {
 }
 
 .history-list {
-    flex: 1;
     overflow-y: auto;
-    list-style: none;
+    list-style: georgian;
     padding: 0;
     margin: 0;
     border: 1px solid #ddd;
@@ -102,7 +84,7 @@ button:disabled {
     .history-list li {
         padding: 8px 12px;
         border-bottom: 1px solid #eee;
-        font-size: 13px;
+        font-size: 11px;
         font-family: monospace;
         cursor: pointer;
     }

@@ -1,44 +1,16 @@
-
-.shape-readout, .canvas-topline, .canvas-footline {
-    font: 500 11px 'DM Mono', monospace;
-    text-transform: uppercase;
-    letter-spacing: .04em;
-}
-
-.shape-readout {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    color: var(--muted);
-}
-
-    .shape-readout #tensor-count {
-        padding-left: 10px;
-        border-left: 1px solid var(--line);
-    }
-
-.status-dot {
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    background: var(--green);
-    box-shadow: 0 0 0 4px #d5eadb;
-}
-
-.workspace {
-    display: grid;
-    grid-template-columns: minmax(0, 2fr) minmax(0, 3fr);
-    gap: 20px;
-    align-items: start;
-}
-
-.canvas-panel, .controls-panel {
+.controls-pane-editimage {
+    flex: 1;
+    place-items: center;
     background: var(--panel);
     border: 1px solid var(--line);
+    padding: 25px;
 }
-
-.canvas-panel {
-    padding: 16px;
+.canvas-panel-editimage {
+    flex: 2;
+    place-items: center;
+    background: white;
+    border: 1px solid var(--line);
+    padding: 25px;
 }
 
 .canvas-topline, .canvas-footline {
@@ -75,10 +47,11 @@
     }
 
 .canvas-frame {
-    display: grid;
+    display: flex;
     place-items: center;
-    min-height: 430px;
     padding: 30px;
+    width:auto;
+    height:auto;
     overflow: auto;
     background-image: linear-gradient(45deg, #dcd3c3 25%, transparent 25%), linear-gradient(-45deg, #dcd3c3 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #dcd3c3 75%), linear-gradient(-45deg, transparent 75%, #dcd3c3 75%);
     background-size: 24px 24px;
@@ -88,7 +61,7 @@
 canvas {
     border-radius: 4px;
     display: block;
-    width: min(100%, 660px);
+    width: 100%;
     height: auto;
     image-rendering: pixelated;
     cursor: crosshair;
@@ -96,7 +69,7 @@ canvas {
 
 .canvas-stage {
     position: relative;
-    width: min(100%, 660px);
+    width: 100%;
     line-height: 0;
 }
 
@@ -110,12 +83,6 @@ canvas {
     box-shadow: none;
 }
 
-.controls-panel {
-    display: flex;
-    flex-direction: column;
-    align-self: start;
-    padding: 32px;
-}
 
 .upload-block {
     display: flex;
@@ -162,149 +129,6 @@ canvas {
     font-size: .9rem;
     line-height: 1.5;
 }
-
-.sliders {
-    display: grid;
-    gap: 28px;
-}
-
-.channel-row {
-    display: grid;
-    gap: 12px;
-    color: var(--ink);
-    font: 500 12px 'DM Mono', monospace;
-    text-transform: uppercase;
-}
-
-.channel-name {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-    .channel-name i {
-        display: inline-block;
-        width: 10px;
-        height: 10px;
-        margin-right: 9px;
-        border-radius: 50%;
-        background: var(--line);
-    }
-
-    .channel-name output {
-        color: var(--muted);
-    }
-
-.channel-r .channel-name i {
-    background: var(--red);
-}
-
-.channel-g .channel-name i {
-    background: var(--green);
-}
-
-.channel-b .channel-name i {
-    background: var(--blue);
-}
-
-input[type='range'] {
-    width: 100%;
-    accent-color: var(--ink);
-    cursor: ew-resize;
-}
-
-.channel-inputs {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) 58px;
-    gap: 10px;
-    align-items: center;
-}
-
-.channel-number {
-    width: 100%;
-    padding: 6px 5px;
-    color: var(--ink);
-    background: var(--panel);
-    border: 1px solid var(--line);
-    font: 500 12px 'DM Mono', monospace;
-}
-
-    .channel-number:focus {
-        outline: 2px solid var(--ink);
-        outline-offset: 1px;
-    }
-
-.channel-r input {
-    accent-color: var(--red);
-}
-
-.channel-g input {
-    accent-color: var(--green);
-}
-
-.channel-b input {
-    accent-color: var(--blue);
-}
-
-button {
-    margin-top: 46px;
-    padding: 13px 16px;
-    color: var(--panel);
-    background: var(--ink);
-    border: 0;
-    font: 600 11px 'DM Mono', monospace;
-    text-transform: uppercase;
-    cursor: pointer;
-}
-
-    button:hover {
-        background: #4e5555;
-    }
-
-.selection-actions, .history-actions {
-    display: grid;
-    gap: 10px;
-    margin-top: 28px;
-}
-
-    .selection-actions button {
-        margin-top: 0;
-    }
-
-.history-actions {
-    grid-template-columns: 1fr 1fr;
-}
-
-    .history-actions button {
-        margin-top: 0;
-    }
-
-        .history-actions button:disabled {
-            color: var(--muted);
-            background: #eeeae2;
-            border-color: var(--line);
-            cursor: not-allowed;
-        }
-
-.secondary-button {
-    color: var(--ink);
-    background: transparent;
-    border: 1px solid var(--line);
-}
-
-    .secondary-button:hover {
-        color: var(--panel);
-        background: var(--ink);
-    }
-
-.update-button {
-    color: var(--panel);
-    background: var(--green);
-}
-
-    .update-button:hover {
-        background: #39845b;
-    }
 
 .tensor-note {
     display: flex;

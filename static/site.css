@@ -54,30 +54,40 @@ h2 {
 }
 
 .controls-panel {
-    flex: 1;
+    display: block;
+    gap: 10px;
+    align-self: start;
+    padding: 25px;
+    width: 100%;
+}
+
+
+.history-panel {
     display: flex;
-    flex-direction: column;
-    gap: 20px;
-    min-width: 320px;
+    border-left: 1px solid #eee;
+    padding-left: 10px;
+}
+
+canvas {
+    border-radius: 4px;
 }
 
 
 .panel {
     background: white;
     border: 1px solid #d6e0e9;
-    border-radius: 16px;
-    padding: 20px;
+    border-radius: 25px;
+    padding: 10px;
     box-shadow: 0 8px 30px #1830440d;
 }
 
 .upload-panel, .actions, .panel-heading, .selection-labels {
     display: flex;
-    align-items: center;
-    gap: 14px;
+    gap: 10px;
 }
 
 .upload-panel {
-    flex-wrap: wrap;
+
     margin-bottom: 18px;
 }
 
@@ -269,25 +279,6 @@ input[type=range] {
     font-weight: 700;
 }
 
-@media (max-width: 700px) {
-    .controls-grid {
-        grid-template-columns: 1fr;
-    }
-
-    .panel-heading {
-        align-items: flex-start;
-    }
-
-    .upload-panel, .actions, .image-upload-controls {
-        align-items: stretch;
-        flex-direction: column;
-    }
-
-    button {
-        width: 100%;
-    }
-}
-
 /* The main panel wrapper */
 .panel-container {
     width: 100%;
@@ -371,3 +362,279 @@ input.custom-btn {
     }
 }
 
+.workspace {
+    display: grid;
+    grid-template-columns: minmax(0, 2fr) minmax(0, 3fr);
+    gap: 10px;
+    align-items: start;
+}
+
+.shape-readout, .canvas-topline, .canvas-footline {
+    font: 500 11px 'DM Mono', monospace;
+    text-transform: uppercase;
+    letter-spacing: .04em;
+}
+
+.shape-readout {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--muted);
+}
+
+    .shape-readout #tensor-count {
+        padding-left: 10px;
+        border-left: 1px solid var(--line);
+    }
+
+.status-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--green);
+    box-shadow: 0 0 0 4px #d5eadb;
+}
+
+
+
+.control-section {
+    background: #334155;
+    padding: 15px;
+    border-radius: 6px;
+}
+
+.slider-group {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    margin-bottom: 12px;
+}
+
+.btn-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 10px;
+}
+
+label {
+    font-size: 13px;
+    color: #cbd5e1;
+}
+
+span {
+    float: right;
+    color: #38bdf8;
+    font-weight: bold;
+}
+
+button {
+    padding: 9px 14px;
+    border: none;
+    border-radius: 5px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.btn-start {
+    background-color: #10b981;
+    color: white;
+}
+
+.btn-stop {
+    background-color: #ef4444;
+    color: white;
+}
+
+.btn-action {
+    background-color: #3b82f6;
+    color: white;
+}
+
+button:hover {
+    opacity: 0.9;
+}
+
+button:disabled {
+    background-color: #64748b;
+    cursor: not-allowed;
+}
+
+.history-list {
+    flex: 1;
+    overflow-y: auto;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    border: 1px solid #334155;
+    background: #0f172a;
+    border-radius: 4px;
+}
+
+    .history-list li {
+        padding: 8px 12px;
+        border-bottom: 1px solid #334155;
+        font-size: 12px;
+        font-family: monospace;
+        cursor: pointer;
+    }
+
+        .history-list li:hover {
+            background: #1e293b;
+            color: #38bdf8;
+        }
+
+.upload-input {
+    background: #1e293b;
+    padding: 8px;
+    border-radius: 4px;
+    border: 1px dashed #38bdf8;
+    color: #cbd5e1;
+    width: 90%;
+    cursor: pointer;
+}
+
+
+.sliders {
+    display: grid;
+    gap: 28px;
+}
+
+.channel-row {
+    display: grid;
+    gap: 12px;
+    color: var(--ink);
+    font: 500 12px 'DM Mono', monospace;
+    text-transform: uppercase;
+}
+
+.channel-name {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+    .channel-name i {
+        display: inline-block;
+        width: 10px;
+        height: 10px;
+        margin-right: 9px;
+        border-radius: 50%;
+        background: var(--line);
+    }
+
+    .channel-name output {
+        color: var(--muted);
+    }
+
+.channel-r .channel-name i {
+    background: var(--red);
+}
+
+.channel-g .channel-name i {
+    background: var(--green);
+}
+
+.channel-b .channel-name i {
+    background: var(--blue);
+}
+
+input[type='range'] {
+    width: 100%;
+    accent-color: var(--ink);
+    cursor: ew-resize;
+}
+
+.channel-inputs {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 58px;
+    gap: 10px;
+    align-items: center;
+}
+
+.channel-number {
+    width: 100%;
+    padding: 6px 5px;
+    color: var(--ink);
+    background: var(--panel);
+    border: 1px solid var(--line);
+    font: 500 12px 'DM Mono', monospace;
+}
+
+    .channel-number:focus {
+        outline: 2px solid var(--ink);
+        outline-offset: 1px;
+    }
+
+.channel-r input {
+    accent-color: var(--red);
+}
+
+.channel-g input {
+    accent-color: var(--green);
+}
+
+.channel-b input {
+    accent-color: var(--blue);
+}
+
+button {
+    margin-top: 46px;
+    padding: 13px 16px;
+    color: var(--panel);
+    background: var(--ink);
+    border: 0;
+    font: 600 11px 'DM Mono', monospace;
+    text-transform: uppercase;
+    cursor: pointer;
+}
+
+    button:hover {
+        background: #4e5555;
+    }
+
+.selection-actions, .history-actions {
+    display: grid;
+    gap: 10px;
+    margin-top: 28px;
+}
+
+    .selection-actions button {
+        margin-top: 0;
+    }
+
+.history-actions {
+    grid-template-columns: 1fr 1fr;
+}
+
+    .history-actions button {
+        margin-top: 0;
+    }
+
+        .history-actions button:disabled {
+            color: var(--muted);
+            background: #eeeae2;
+            border-color: var(--line);
+            cursor: not-allowed;
+        }
+
+.secondary-button {
+    color: var(--ink);
+    background: transparent;
+    border: 1px solid var(--line);
+}
+
+    .secondary-button:hover {
+        color: var(--panel);
+        background: var(--ink);
+    }
+
+.update-button {
+    color: var(--panel);
+    background: var(--green);
+}
+
+    .update-button:hover {
+        background: #39845b;
+    }

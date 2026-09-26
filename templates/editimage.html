@@ -2,87 +2,91 @@
 <title>{% block title %}Tensor Edits{% endblock %}</title>
 {% block content %}
 
-      <div class="shape-readout" aria-live="polite">
-        <span id="shape">Loading tensor...</span>
-        <span id="tensor-count">Stack 0</span>
-        <span class="status-dot"></span>
-      </div>
+      
    
-    <section class="workspace" aria-label="Tensor image viewer">
-      <aside class="controls-panel">
+<section class="workspace" aria-label="Tensor image viewer">
+
+    
+
+    <div class="controls-pane-editimage">
+        <div class="shape-readout" aria-live="polite">
+            <span id="shape">Loading tensor...</span>
+            <span id="tensor-count">Stack 0</span>
+            <span class="status-dot"></span>
+        </div>
         <div class="upload-block">
-          <div>
-            <p class="eyebrow">Source image</p>
-            <p id="image-name" class="image-name">Generated sample</p>
-          </div>
-          <input id="image-upload" type="file" accept="image/*" hidden>
-          <button id="upload-button" class="upload-button" type="button">Select image</button>
+            <div>
+                <p class="eyebrow">Source image</p>
+                <p id="image-name" class="image-name">Generated sample</p>
+            </div>
+            <input id="image-upload" type="file" accept="image/*" hidden>
+            <button id="upload-button" class="custom-btn" type="button">Select image</button>
         </div>
         <div class="panel-heading">
-          <p class="eyebrow">Channel mixer</p>
-          <h2>Adjust every pixel</h2>
-          <p class="muted">Each control adds an offset to its tensor channel.</p>
+            <p class="eyebrow">Channel mixer</p>
+            <h2>Adjust every pixel</h2>
+            <p class="muted">Each control adds an offset to its tensor channel.</p>
         </div>
 
         <div class="sliders">
-          <label class="channel-row channel-r" for="red-control">
-            <span class="channel-name"><i></i>Red <output id="red-value">0</output></span>
-            <div class="channel-inputs">
-              <input id="red-control" type="range" min="-255" max="255" value="0">
-              <input id="red-number" class="channel-number" type="number" min="-255" max="255" value="0" aria-label="Red channel offset">
+            <div class="channel-row channel-r" for="red-control">
+                <span class="channel-name"><i></i>Red <output id="red-value">0</output></span>
+                <div class="channel-inputs">
+                    <input id="red-control" type="range" min="-255" max="255" value="0">
+                    <input id="red-number" class="channel-number" type="number" min="-255" max="255" value="0" aria-label="Red channel offset">
+                </div>
             </div>
-          </label>
-          <label class="channel-row channel-g" for="green-control">
-            <span class="channel-name"><i></i>Green <output id="green-value">0</output></span>
-            <div class="channel-inputs">
-              <input id="green-control" type="range" min="-255" max="255" value="0">
-              <input id="green-number" class="channel-number" type="number" min="-255" max="255" value="0" aria-label="Green channel offset">
+            <div class="channel-row channel-g" for="green-control">
+                <span class="channel-name"><i></i>Green <output id="green-value">0</output></span>
+                <div class="channel-inputs">
+                    <input id="green-control" type="range" min="-255" max="255" value="0">
+                    <input id="green-number" class="channel-number" type="number" min="-255" max="255" value="0" aria-label="Green channel offset">
+                </div>
             </div>
-          </label>
-          <label class="channel-row channel-b" for="blue-control">
-            <span class="channel-name"><i></i>Blue <output id="blue-value">0</output></span>
-            <div class="channel-inputs">
-              <input id="blue-control" type="range" min="-255" max="255" value="0">
-              <input id="blue-number" class="channel-number" type="number" min="-255" max="255" value="0" aria-label="Blue channel offset">
+            <div class="channel-row channel-b" for="blue-control">
+                <span class="channel-name"><i></i>Blue <output id="blue-value">0</output></span>
+                <div class="channel-inputs">
+                    <input id="blue-control" type="range" min="-255" max="255" value="0">
+                    <input id="blue-number" class="channel-number" type="number" min="-255" max="255" value="0" aria-label="Blue channel offset">
+                </div>
             </div>
-          </label>
         </div>
 
         <div class="selection-actions">
-          <button id="create-selection-button" type="button">Create selection (latest)</button>
-          <button id="create-original-selection-button" type="button">Create selection (original)</button>
-          <button id="clear-selection-button" class="secondary-button" type="button">Clear selected area</button>
-          <button id="update-button" class="update-button" type="button">Update tensor</button>
+            <button id="create-selection-button" class="custom-btn" type="button">Create selection (latest)</button>
+            <button id="create-original-selection-button" class="custom-btn" type="button">Create selection (original)</button>
+            <button id="clear-selection-button" class="custom-btn" type="button">Clear selected area</button>
+            <button id="update-button" class="custom-btn" type="button">Update tensor</button>
         </div>
         <div class="history-actions">
-          <button id="undo-button" class="secondary-button" type="button">Undo last tensor</button>
-          <button id="reset-button" type="button">Reset channels</button>
+            <button id="undo-button" class="custom-btn" type="button">Undo last tensor</button>
+            <button id="reset-button" class="custom-btn" type="button">Reset channels</button>
         </div>
         <div class="tensor-note">
-          <span class="tensor-mark">[r, g, b]</span>
-          <span>Values are clamped to 0–255 before the canvas renders.</span>
+            <span class="tensor-mark">[r, g, b]</span>
+            <span>Values are clamped to 0–255 before the canvas renders.</span>
         </div>
-      </aside>
+    </div>
 
-      <div class="canvas-panel">
+    <div class="canvas-panel-editimage">
         <div class="canvas-topline">
-          <span>Rendered pixels</span>
-          <span id="pixel-position">Hover a pixel</span>
+            <span>Rendered pixels</span>
+            <span id="pixel-position">Hover a pixel</span>
         </div>
         <div class="canvas-frame">
-          <div class="canvas-stage">
-            <canvas id="tensor-canvas" aria-label="RGB tensor image"></canvas>
-            <canvas id="selection-canvas" aria-label="Canvas selection overlay"></canvas>
-          </div>
+            <div class="canvas-stage">
+                <canvas id="tensor-canvas" aria-label="RGB tensor image"></canvas>
+                <canvas id="selection-canvas" aria-label="Canvas selection overlay"></canvas>
+            </div>
         </div>
         <div class="canvas-footline">
-          <span>Nearest-neighbor preview</span>
-          <div class="canvas-actions">
-            <span id="pixel-values">R 0 &nbsp; G 0 &nbsp; B 0</span>
-            <button id="download-button" class="download-button" type="button">Download PNG</button>
-          </div>
+            <span>Nearest-neighbor preview</span>
+            <div class="canvas-actions">
+                <span id="pixel-values">R 0 &nbsp; G 0 &nbsp; B 0</span>
+                <button id="download-button" class="custom-btn" type="button">Download PNG</button>
+            </div>
         </div>
-      </div>
-    </section>
+    </div>
+</section>
            <script src="{{ url_for('static', filename='js/edit-image.js') }}"></script>
 {% endblock %}

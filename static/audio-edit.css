@@ -180,11 +180,6 @@ output {
     color: #197f7d;
 }
 
-input[type=range] {
-    width: 100%;
-    accent-color: #197f7d;
-}
-
 .actions {
     flex-wrap: wrap;
 }
